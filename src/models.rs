@@ -160,3 +160,8 @@ pub(crate) fn avatar_url(user_id: &str, avatar: &str) -> String {
     };
     format!("https://cdn.discordapp.com/avatars/{user_id}/{avatar}.{ext}?size=1024")
 }
+
+pub(crate) fn emoji_url(emoji_id: &str, animated: bool) -> String {
+    let ext = if animated { "gif" } else { "png" };
+    format!("https://cdn.discordapp.com/emojis/{emoji_id}.{ext}?size=96&quality=lossless")
+}

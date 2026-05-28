@@ -15,7 +15,7 @@ use crate::{
     config::Config,
     models::{
         Activity, ActivityAssets, ActivityTimestamps, ClientStatus, DiscordUser, Presence,
-        PresenceEvent, Spotify, avatar_url,
+        PresenceEvent, Spotify, avatar_url, emoji_url,
     },
     state::AppState,
 };
@@ -436,7 +436,7 @@ fn parse_activity(value: &Value) -> Option<Activity> {
         sync_id: optional_string(&value["sync_id"]),
         timestamps: serde_json::from_value::<ActivityTimestamps>(value["timestamps"].clone()).ok(),
         assets: serde_json::from_value::<ActivityAssets>(value["assets"].clone()).ok(),
-        emoji: optional_value(&value["emoji"]),
+        emoji: optional_emoji(&value["emoji"]),
         party: optional_value(&value["party"]),
         flags: value["flags"].as_u64(),
         buttons: optional_value(&value["buttons"]),
@@ -471,6 +471,17 @@ fn optional_string(value: &Value) -> Option<String> {
 
 fn optional_value(value: &Value) -> Option<Value> {
     (!value.is_null()).then(|| value.clone())
+}
+
+fn optional_emoji(value: &Value) -> Option<Value> {
+    let mut emoji = optional_value(value)?;
+    let Some(emoji_id) = emoji["id"].as_str().filter(|id| !id.is_empty()) else {
+        return Some(emoji);
+    };
+
+    let animated = emoji["animated"].as_bool().unwrap_or(false);
+    emoji["url"] = Value::String(emoji_url(emoji_id, animated));
+    Some(emoji)
 }
 
 fn spotify_album_art_url(asset: &str) -> Option<String> {
