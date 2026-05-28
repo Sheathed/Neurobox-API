@@ -7,7 +7,7 @@ use std::{
     },
 };
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use tokio::sync::{RwLock, broadcast};
 
 use crate::{
@@ -52,6 +52,10 @@ impl AppState {
     }
 
     pub(crate) async fn set_kv(&self, user_id: &str, key: String, value: String) -> Result<()> {
+        if contains_json_escape(&key) || contains_json_escape(&value) {
+            bail!("KV cannot contain quotes, backslashes, or control characters");
+        }
+
         let snapshot = {
             let mut kv = self.kv.write().await;
             kv.entry(user_id.to_owned()).or_default().insert(key, value);
@@ -112,4 +116,10 @@ impl AppState {
             presence,
         });
     }
+}
+
+fn contains_json_escape(value: &str) -> bool {
+    value
+        .chars()
+        .any(|character| matches!(character, '"' | '\\') || character.is_ascii_control())
 }
