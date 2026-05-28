@@ -2,9 +2,14 @@ use std::collections::{HashMap, HashSet};
 
 use anyhow::{Context, Result};
 use axum::{
+    extract::Request,
     Json, Router,
     extract::{Path, State},
-    http::header::AUTHORIZATION,
+    http::{
+        HeaderValue,
+        header::{ACCESS_CONTROL_ALLOW_ORIGIN, AUTHORIZATION},
+    },
+    middleware::{self, Next},
     response::{IntoResponse, Response},
     routing::{get, post},
 };
@@ -29,7 +34,16 @@ pub(crate) fn router(state: AppState) -> Router {
         .route("/socket", get(socket::handler))
         .route("/socket/", get(socket::handler))
         .fallback(not_found)
+        .layer(middleware::from_fn(cors_headers))
         .with_state(state)
+}
+
+async fn cors_headers(request: Request, next: Next) -> Response {
+    let mut response = next.run(request).await;
+    response
+        .headers_mut()
+        .insert(ACCESS_CONTROL_ALLOW_ORIGIN, HeaderValue::from_static("*"));
+    response
 }
 
 async fn root() -> Json<Value> {
