@@ -3,15 +3,15 @@ use std::collections::{HashMap, HashSet};
 use anyhow::{Context, Result};
 use axum::{
     extract::Request,
-    Json, Router,
     extract::{Path, State},
     http::{
         HeaderValue,
-        header::{ACCESS_CONTROL_ALLOW_ORIGIN, AUTHORIZATION},
+        header::{ACCESS_CONTROL_ALLOW_ORIGIN, AUTHORIZATION, CONTENT_TYPE},
     },
     middleware::{self, Next},
-    response::{IntoResponse, Response},
+    response::{Html, IntoResponse, Response},
     routing::{get, post},
+    Json, Router,
 };
 use serde_json::{Value, json};
 use tracing::warn;
@@ -25,6 +25,9 @@ use crate::{
 pub(crate) fn router(state: AppState) -> Router {
     Router::new()
         .route("/", get(root))
+        .route("/css/index.css", get(index_css))
+        .route("/js/index.js", get(index_js))
+        .route("/assets/NEUROBOX.svg", get(neurobox_logo))
         .route("/health", get(health))
         .route("/health/", get(health))
         .route("/v1/users/:id", get(get_user))
@@ -46,16 +49,32 @@ async fn cors_headers(request: Request, next: Next) -> Response {
     response
 }
 
-async fn root() -> Json<Value> {
-    Json(json!({
-        "service": "neurobox-api",
-        "routes": {
-            "health": "/health",
-            "user": "/v1/users/{discord_user_id}",
-            "batch": "POST /v1/users",
-            "socket": "/socket"
-        }
-    }))
+async fn root() -> Html<&'static str> {
+    Html(include_str!("etc/index.html"))
+}
+
+async fn index_css() -> impl IntoResponse {
+    (
+        [(CONTENT_TYPE, HeaderValue::from_static("text/css; charset=utf-8"))],
+        include_str!("etc/css/index.css"),
+    )
+}
+
+async fn index_js() -> impl IntoResponse {
+    (
+        [(
+            CONTENT_TYPE,
+            HeaderValue::from_static("text/javascript; charset=utf-8"),
+        )],
+        include_str!("etc/js/index.js"),
+    )
+}
+
+async fn neurobox_logo() -> impl IntoResponse {
+    (
+        [(CONTENT_TYPE, HeaderValue::from_static("image/svg+xml"))],
+        include_str!("etc/assets/NEUROBOX.svg"),
+    )
 }
 
 async fn health(State(state): State<AppState>) -> Json<Value> {

@@ -1,0 +1,320 @@
+/* ═══════════════════════════════════════════════════════ */
+/*  NEUROBOX — Pixel Art Landing Page                     */
+/*  Everything is blocky, sharp, and retro                */
+/* ═══════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+/* ── Tokens ──────────────────────────────────────────── */
+:root {
+    --bg-dark:       #0e0318;
+    --bg-mid:        #1a062e;
+    --purple-deep:   #3b0a64;
+    --purple:        #7b2dba;
+    --magenta:       #c840e9;
+    --pink:          #e94fcf;
+    --pink-light:    #ff7ce5;
+    --hot-pink:      #ff3cac;
+    --white:         #ffffff;
+    --pixel:         4px;
+    --font:          "Press Start 2P", monospace;
+}
+
+/* ── Reset ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+    color: var(--white);
+    background: var(--bg-dark);
+    overflow: hidden;
+    position: relative;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+/* ── Pixel grid background ───────────────────────────── */
+.pixel-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        linear-gradient(rgba(123, 45, 186, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(123, 45, 186, 0.06) 1px, transparent 1px);
+    background-size: var(--pixel) var(--pixel);
+    pointer-events: none;
+}
+
+/* ── Scanline overlay ────────────────────────────────── */
+.scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.08) 2px,
+        rgba(0, 0, 0, 0.08) 4px
+    );
+}
+
+/* ── Pixel star particles ────────────────────────────── */
+.stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    background: var(--magenta);
+    image-rendering: pixelated;
+    animation: star-blink ease-in-out infinite alternate;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    animation: fade-in 0.6s ease-out both;
+}
+
+
+
+/* ═══════════════════════════════════════════════════════ */
+/*  TITLE & GEARS                                         */
+/* ═══════════════════════════════════════════════════════ */
+.title-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* ── Pixel gear decorations ──────────────────────────── */
+.pixel-gear {
+    position: absolute;
+    image-rendering: pixelated;
+    /* 8×8 pixel gear using box-shadow pixel art */
+    width: var(--pixel);
+    height: var(--pixel);
+    background: var(--pink-light);
+    opacity: 0.5;
+}
+
+.pixel-gear-1 {
+    top: -24px;
+    right: -32px;
+    box-shadow:
+        /* Row 0 */          calc(var(--pixel)*2) 0 0 var(--pink-light), calc(var(--pixel)*3) 0 0 var(--pink-light), calc(var(--pixel)*5) 0 0 var(--pink-light), calc(var(--pixel)*6) 0 0 var(--pink-light),
+        /* Row 1 */ calc(var(--pixel)*1) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*2) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*3) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*4) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*1) 0 var(--pink-light), calc(var(--pixel)*7) calc(var(--pixel)*1) 0 var(--pink-light),
+        /* Row 2 */ calc(var(--pixel)*2) calc(var(--pixel)*2) 0 var(--pink-light), calc(var(--pixel)*3) calc(var(--pixel)*2) 0 var(--pink-light), calc(var(--pixel)*4) calc(var(--pixel)*2) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*2) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*2) 0 var(--pink-light),
+        /* Row 3 */ 0 calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*1) calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*2) calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*7) calc(var(--pixel)*3) 0 var(--pink-light), calc(var(--pixel)*8) calc(var(--pixel)*3) 0 var(--pink-light),
+        /* Row 4 */ 0 calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*1) calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*2) calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*7) calc(var(--pixel)*4) 0 var(--pink-light), calc(var(--pixel)*8) calc(var(--pixel)*4) 0 var(--pink-light),
+        /* Row 5 */ calc(var(--pixel)*2) calc(var(--pixel)*5) 0 var(--pink-light), calc(var(--pixel)*3) calc(var(--pixel)*5) 0 var(--pink-light), calc(var(--pixel)*4) calc(var(--pixel)*5) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*5) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*5) 0 var(--pink-light),
+        /* Row 6 */ calc(var(--pixel)*1) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*2) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*3) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*4) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*6) 0 var(--pink-light), calc(var(--pixel)*7) calc(var(--pixel)*6) 0 var(--pink-light),
+        /* Row 7 */ calc(var(--pixel)*2) calc(var(--pixel)*7) 0 var(--pink-light), calc(var(--pixel)*3) calc(var(--pixel)*7) 0 var(--pink-light), calc(var(--pixel)*5) calc(var(--pixel)*7) 0 var(--pink-light), calc(var(--pixel)*6) calc(var(--pixel)*7) 0 var(--pink-light);
+    animation: gear-rotate 6s steps(8) infinite;
+}
+
+.pixel-gear-2 {
+    bottom: -8px;
+    left: -24px;
+    opacity: 0.35;
+    box-shadow:
+        calc(var(--pixel)*2) 0 0 var(--magenta), calc(var(--pixel)*3) 0 0 var(--magenta),
+        calc(var(--pixel)*1) calc(var(--pixel)*1) 0 var(--magenta), calc(var(--pixel)*2) calc(var(--pixel)*1) 0 var(--magenta), calc(var(--pixel)*3) calc(var(--pixel)*1) 0 var(--magenta), calc(var(--pixel)*4) calc(var(--pixel)*1) 0 var(--magenta),
+        0 calc(var(--pixel)*2) 0 var(--magenta), calc(var(--pixel)*1) calc(var(--pixel)*2) 0 var(--magenta), calc(var(--pixel)*4) calc(var(--pixel)*2) 0 var(--magenta), calc(var(--pixel)*5) calc(var(--pixel)*2) 0 var(--magenta),
+        calc(var(--pixel)*1) calc(var(--pixel)*3) 0 var(--magenta), calc(var(--pixel)*2) calc(var(--pixel)*3) 0 var(--magenta), calc(var(--pixel)*3) calc(var(--pixel)*3) 0 var(--magenta), calc(var(--pixel)*4) calc(var(--pixel)*3) 0 var(--magenta),
+        calc(var(--pixel)*2) calc(var(--pixel)*4) 0 var(--magenta), calc(var(--pixel)*3) calc(var(--pixel)*4) 0 var(--magenta);
+    animation: gear-rotate 8s steps(8) infinite reverse;
+}
+
+.title {
+    font-family: var(--font);
+    font-size: clamp(24px, 7vw, 48px);
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: var(--white);
+    text-shadow:
+        var(--pixel) var(--pixel) 0 var(--purple-deep),
+        calc(var(--pixel) * 2) calc(var(--pixel) * 2) 0 rgba(0,0,0,0.3),
+        0 0 30px rgba(200, 64, 233, 0.4);
+    letter-spacing: 4px;
+}
+
+.title-box {
+    color: var(--magenta);
+    text-shadow:
+        var(--pixel) var(--pixel) 0 var(--purple-deep),
+        0 0 24px rgba(200, 64, 233, 0.6);
+}
+
+
+
+/* ── Pixel bar divider ────────────────────────────────── */
+.pixel-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 180px;
+}
+
+.pixel-bar span {
+    width: 8px;
+    height: 8px;
+    background: var(--magenta);
+}
+
+.pixel-bar span:nth-child(odd)  { opacity: 0.6; animation: px-blink 2s steps(2) infinite; }
+.pixel-bar span:nth-child(even) { opacity: 0.3; animation: px-blink 2s steps(2) infinite 1s; }
+.pixel-bar span:nth-child(3n)   { background: var(--pink); }
+.pixel-bar span:nth-child(5n)   { background: var(--pink-light); opacity: 0.8; }
+
+/* ═══════════════════════════════════════════════════════ */
+/*  LOGO SVG                                              */
+/* ═══════════════════════════════════════════════════════ */
+.logo-image {
+    width: 140px;
+    height: auto;
+    margin-bottom: 50px;
+    filter: drop-shadow(0 0 24px rgba(200, 64, 233, 0.2));
+    animation: floating 4s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/*  BUTTONS — retro pixel art style                       */
+/* ═══════════════════════════════════════════════════════ */
+.cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+    width: 340px; /* increased width to prevent text wrap */
+    max-width: 90vw;
+    margin-bottom: 40px;
+}
+
+.btn {
+    display: block;
+    font-family: var(--font);
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--white);
+    padding: 16px 24px;
+    position: relative;
+    cursor: pointer;
+    background: var(--purple-deep);
+    transition: background 0.1s, transform 0.1s;
+
+    /* Pixel border using box-shadow layers */
+    border: none;
+    box-shadow:
+        /* top */
+        0                       calc(var(--pixel) * -1) 0 var(--magenta),
+        /* bottom */
+        0                       var(--pixel)             0 var(--purple),
+        /* left */
+        calc(var(--pixel) * -1) 0                        0 var(--magenta),
+        /* right */
+        var(--pixel)            0                        0 var(--purple),
+        /* corners for depth */
+        var(--pixel)            var(--pixel)             0 var(--purple-deep),
+        calc(var(--pixel) * -1) calc(var(--pixel) * -1)  0 var(--pink),
+        /* glow - reduced */
+        0 0 10px rgba(200, 64, 233, 0.05);
+}
+
+.btn:hover {
+    background: var(--purple);
+    box-shadow:
+        0                       calc(var(--pixel) * -1) 0 var(--pink),
+        0                       var(--pixel)             0 var(--magenta),
+        calc(var(--pixel) * -1) 0                        0 var(--pink),
+        var(--pixel)            0                        0 var(--magenta),
+        var(--pixel)            var(--pixel)             0 var(--purple-deep),
+        calc(var(--pixel) * -1) calc(var(--pixel) * -1)  0 var(--pink-light),
+        0 0 15px rgba(200, 64, 233, 0.15);
+    transform: scale(1.03);
+}
+
+.btn:active {
+    transform: translate(var(--pixel), var(--pixel)) scale(1);
+    box-shadow:
+        0                       calc(var(--pixel) * -1) 0 var(--purple),
+        0                       var(--pixel)             0 var(--purple),
+        calc(var(--pixel) * -1) 0                        0 var(--purple),
+        var(--pixel)            0                        0 var(--purple),
+        0 0 10px rgba(200, 64, 233, 0.1);
+}
+
+.btn-text {
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    letter-spacing: 3px;
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/*  ANIMATIONS                                            */
+/* ═══════════════════════════════════════════════════════ */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+@keyframes gear-rotate {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes px-blink {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 0.8; }
+}
+
+
+@keyframes star-blink {
+    0%   { opacity: 0.1; }
+    100% { opacity: 0.8; }
+}
+
+/* ═══════════════════════════════════════════════════════ */
+/*  RESPONSIVE                                            */
+/* ═══════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+    :root { --pixel: 3px; }
+
+
+
+    .btn {
+        padding: 14px 36px;
+        font-size: 12px;
+    }
+
+    .pixel-bar { max-width: 130px; }
+
+    .pixel-bar span {
+        width: 6px;
+        height: 6px;
+    }
+}
